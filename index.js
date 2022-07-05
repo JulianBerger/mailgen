@@ -4,6 +4,7 @@ var ejs = require("ejs");
 var juice = require("juice");
 var postcss = require("postcss");
 var cssvariables = require("postcss-css-variables");
+var syntax = require("postcss-html")();
 
 // Package constructor
 function Mailgen(options) {
@@ -102,7 +103,9 @@ Mailgen.prototype.generate = function (params) {
     filename: this.themePath,
   });
 
-  output = postcss([cssvariables()]).process(mycss).css;
+  output = postcss([cssvariables()]).process(output, {
+    syntax: syntax,
+  }).content;
 
   // Inline CSS
   output = juice(output);
